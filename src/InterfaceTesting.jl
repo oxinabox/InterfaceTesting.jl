@@ -42,7 +42,6 @@ function test_iterator_interface(itertype; testset_type=Test.DefaultTestSet)
         @test partial_method_exists(next, (itertype,:))
         @test partial_method_exists(done, (itertype,:))
 
-
         #Iterators size
         if Base.iteratorsize(itertype)==Base.HasShape()
             @test method_exists(size, (itertype,))
