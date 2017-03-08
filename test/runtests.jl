@@ -1,5 +1,7 @@
-using InterfaceTesting.jl
+using InterfaceTesting
 using Base.Test
 
 # write your own tests here
-@test 1 == 2
+@testset "partial_method_exists" begin
+    partial_method_exists(length, Array)
+end
