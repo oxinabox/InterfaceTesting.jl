@@ -45,6 +45,15 @@ This will run a `@testset` to check everything is defined correctly:
 Test Summary:                   | Pass  Total
   CountingGames.SomeRandomNumbers |    5      5
 ```
+#### On testing parametric types
+If your type takes a parameter, eg `Foo{T}`, you are better to run the tests with that parameter filled in.
+Eg `test_iterator_interface(Foo{Int})` rather than `test_iterator_interface(Foo)`.
+Because of how dispatch to parametric types works.
+`Foo{T} != Foo` but `Foo{T} <: Foo`.
+This means that if you have defined `iteratorsize{T}{::Type{Foo{T}})`
+generally the `test_iterator_interface(Foo)` will fail as that definion does not apply to `Foo`.
+It is complicated like that.
+But the take away should be to fill in your type parameters when using these tests.
 
 ### Supported Interfaces
 
