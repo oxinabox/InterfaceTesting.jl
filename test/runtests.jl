@@ -7,9 +7,18 @@ type NoThrowTestSet <: Base.Test.AbstractTestSet
     NoThrowTestSet(desc) = new([])
 end
 Base.Test.record(ts::NoThrowTestSet, t::Base.Test.Result) = (push!(ts.results, t); t)
-Base.Test.finish(ts::NoThrowTestSet) = ts.results<num
+Base.Test.finish(ts::NoThrowTestSet) = ts.results
 num_fails(results) = sum(res->isa(res, Fail), results)
 
+function includes_failing_string(results, substring)
+    for res in results
+        isa(res, Fail) || continue
+        if contains(string(res), substring)
+            return true
+        end
+    end
+    false
+end
 
 
 immutable BrokenJuliaZeroFourIterator end
@@ -68,14 +77,19 @@ end
     test_iterator_interface(Int)
 
     test_iterator_interface(UnknownLengthIterator)
-BrokenIteratorsizeIterator_res = test_iterator_interface(BrokenIteratorsizeIterator; testset_type=NoThrowTestSet)
-    @test 0<num_fails(BrokenIteratorsizeIterator_res)
+
+    BrokenIteratorsizeIterator_res = test_iterator_interface(BrokenIteratorsizeIterator; testset_type=NoThrowTestSet)
+    @test 2==num_fails(BrokenIteratorsizeIterator_res)
+    @test includes_failing_string(BrokenIteratorsizeIterator_res, "which(Base.iteratorsize")
+    @test includes_failing_string(BrokenIteratorsizeIterator_res, "length")
 
     BrokenJuliaZeroFourIterator_res=test_iterator_interface(BrokenJuliaZeroFourIterator; testset_type=NoThrowTestSet)
-    @test 0<num_fails(BrokenJuliaZeroFourIterator_res)
+    @test 1==num_fails(BrokenJuliaZeroFourIterator_res)
+    @test includes_failing_string(BrokenJuliaZeroFourIterator_res, "length")
 
     BrokenLengthIterator_res=test_iterator_interface(BrokenLengthIterator; testset_type=NoThrowTestSet)
-    @test 0<num_fails(BrokenLengthIterator_res)
+    @test 1==num_fails(BrokenLengthIterator_res)
+    @test includes_failing_string(BrokenLengthIterator_res, "length")
 end
 
 
@@ -95,5 +109,5 @@ end
     test_abstractarray_interface(UnitRange{Int64}) #Logically this should *not* pass, since not setable, but that method as been coded to manually throw an error
 
     Dict_res = test_abstractarray_interface(Dict,  testset_type=NoThrowTestSet) #Not a proper indexable, no endof
-    @test has_fails(Dict_res)
+    @test 0<num_fails(Dict_res)
 end

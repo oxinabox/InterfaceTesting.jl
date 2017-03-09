@@ -43,6 +43,9 @@ function test_iterator_interface(itertype; testset_type=Test.DefaultTestSet)
         @test partial_method_exists(done, (itertype,:))
 
         #Iterators size
+
+        @test which(Base.iteratorsize, (itertype,)) == which(Base.iteratorsize, (Any,))#Method for Instance of type should always be the fall back -- never set directly
+
         if Base.iteratorsize(itertype)==Base.HasShape()
             @test method_exists(size, (itertype,))
             @test method_exists(length, (itertype,))
