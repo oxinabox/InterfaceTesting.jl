@@ -1,4 +1,6 @@
 # InterfaceTesting.jl
+[![Build Status](https://travis-ci.org/oxinabox/InterfaceTesting.jl.svg?branch=master)](https://travis-ci.org/oxinabox/InterfaceTesting.jl)
+
 
 Julia has several ["Informal Interfaces"](http://docs.julialang.org/en/stable/manual/interfaces/).
 Unlike many mainstream static languages,
