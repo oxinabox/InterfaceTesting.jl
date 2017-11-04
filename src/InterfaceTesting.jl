@@ -17,8 +17,9 @@ Wild cards match any type (Not just `Any`)
 function partial_method_exists(f, types)
     meths = methods(f)
     for mm in meths
+        @show mm
         sig_types =  mm.sig.types[2:end]
-        length(types)!=length(sig_types)  && continue
+        length(types) != length(sig_types)  && continue
 
         for (spec, sig) in zip(types, sig_types)
             spec==(:) && continue

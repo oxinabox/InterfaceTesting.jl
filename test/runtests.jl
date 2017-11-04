@@ -58,7 +58,7 @@ function Base.next(::UnknownLengthIterator, state)
 end
 
 @testset "partial_method_exists" begin
-    @test partial_method_exists(length, (Array,))
+    @test partial_method_exists(length, (Vector,))
     @test !partial_method_exists(length, (Function,))
 
     @test partial_method_exists(rpad, (String,Int))
