@@ -2,7 +2,7 @@ using InterfaceTesting
 using Base.Test
 using Base.Test: Fail
 
-type NoThrowTestSet <: Base.Test.AbstractTestSet
+mutable struct NoThrowTestSet <: Base.Test.AbstractTestSet
     results::Vector
     NoThrowTestSet(desc) = new([])
 end
@@ -21,19 +21,19 @@ function includes_failing_string(results, substring)
 end
 
 
-immutable BrokenJuliaZeroFourIterator end
+struct BrokenJuliaZeroFourIterator end
 Base.start(::BrokenJuliaZeroFourIterator) = 1
 Base.next(::BrokenJuliaZeroFourIterator, state) = state+1, state+1
 Base.done(::BrokenJuliaZeroFourIterator, state) = state>5
 
-immutable BrokenHasLengthIterator end
+struct BrokenHasLengthIterator end
 Base.start(::BrokenHasLengthIterator) = 1
 Base.next(::BrokenHasLengthIterator, state) = state+1, state+1
 Base.done(::BrokenHasLengthIterator, state) = state>5
 Base.iteratorsize(::Type{BrokenHasLengthIterator}) = Base.HasLength #Return the Type not the instance
 Base.length(::BrokenHasLengthIterator) = 5
 
-immutable BrokenIteratorsizeIterator end
+struct BrokenIteratorsizeIterator end
 Base.start(::BrokenIteratorsizeIterator) = 1
 Base.next(::BrokenIteratorsizeIterator, state) = state+1, state+1
 Base.done(::BrokenIteratorsizeIterator, state) = false
@@ -41,14 +41,14 @@ Base.iteratorsize(::BrokenIteratorsizeIterator) = Base.IsInfinite()
 #Set iteratorsize on the instance not the type
 
 
-immutable BrokenLengthIterator end
+struct BrokenLengthIterator end
 Base.start(::BrokenLengthIterator) = 1
 Base.next(::BrokenLengthIterator, state) = state+1, state+1
 Base.done(::BrokenLengthIterator, state) = state>5
 Base.iteratorsize(::Type{BrokenLengthIterator}) = Base.HasLength()
 #Don't define the length
 
-immutable UnknownLengthIterator end
+struct UnknownLengthIterator end
 Base.start(::UnknownLengthIterator) = 1
 Base.done(::UnknownLengthIterator, state) = state>100
 Base.iteratorsize(::Type{UnknownLengthIterator}) = Base.SizeUnknown()
