@@ -20,7 +20,7 @@ If in your src file you have defined an iterator `SomeRandomNumbers`
 ```julia
 module CountingGames
     export SomeRandomNumbers
-    immutable SomeRandomNumbers end
+    struct SomeRandomNumbers end
     Base.start(::SomeRandomNumbers) = 1
     Base.done(::SomeRandomNumbers, state) = state>100
     Base.iteratorsize(::Type{SomeRandomNumbers}) = Base.SizeUnknown()
